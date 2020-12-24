@@ -8,29 +8,12 @@ import android.util.Log;
 
 class CalculateService : Service() {
 
-    private val LOG_TAG = "Service"
-
-    override fun onCreate() {
-        super.onCreate()
-        Log.d(LOG_TAG, "MyService onCreate")
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        Log.d(LOG_TAG, "MyService onDestroy")
-    }
 
     override fun onStartCommand(intent: Intent, flags: Int, startId: Int): Int {
-        Log.d(LOG_TAG, "MyService onStartCommand")
-
-        val firstNum = intent.getDoubleExtra(FIRST_NUMBER, -2.0)
-        val secondNum = intent.getDoubleExtra(SECOND_NUMBER, -1.0)
-        val result = firstNum + secondNum
 
         val intentToBR = Intent()
         intentToBR.action = BROADCAST_ACTION
-        intentToBR.putExtra(RESULT, result)
-        //intent.addFlags(Intent.FLAG_INCLUDE_STOPPED_PACKAGES) // разрешающий запуск активности остановленных приложений
+        intentToBR.putExtra(RESULT, addNumber(intent))
         sendBroadcast(intentToBR)
 
         return super.onStartCommand(intent, flags, startId)
@@ -38,5 +21,11 @@ class CalculateService : Service() {
 
     override fun onBind(arg0: Intent?): IBinder? {
         return null
+    }
+
+    private fun addNumber(intent: Intent) : Double{
+        val firstNum = intent.getDoubleExtra(FIRST_NUMBER, -2.0)
+        val secondNum = intent.getDoubleExtra(SECOND_NUMBER, -1.0)
+        return firstNum + secondNum
     }
 }

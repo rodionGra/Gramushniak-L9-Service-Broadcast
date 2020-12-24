@@ -23,7 +23,6 @@ class MainActivity : AppCompatActivity() {
         override fun onReceive(context: Context?, intent: Intent?) {
             val result = intent?.getDoubleExtra(RESULT, 0.0)
             fragment.resultText.text = "Result = $result"
-            //Toast.makeText(context, "onReceive $result", Toast.LENGTH_LONG).show()
         }
     }
 
@@ -31,6 +30,24 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        setupListeners()
+    }
+
+    override fun onStart() {
+        super.onStart()
+        registerReceiver(br, IntentFilter(BROADCAST_ACTION))
+    }
+
+    override fun onStop() {
+        super.onStop()
+        try {
+            unregisterReceiver(br)
+        } catch (e: IllegalArgumentException) {
+            Log.e("Broadcast", "Time tick Receiver not registered", e)
+        }
+    }
+
+    private fun setupListeners(){
         start_service_textV.setOnClickListener {
             val number1Str : String = first_number_edit.text.toString()
             val number2Str : String = second_number_edit.text.toString()
@@ -48,24 +65,6 @@ class MainActivity : AppCompatActivity() {
                 }
             }
         }
-
     }
-
-    override fun onStart() {
-        super.onStart()
-        // создаем фильтр для BroadcastReceiver  IntentFilter(BR.BROADCAST_ACTION)
-        // регистрируем (включаем) BroadcastReceiver
-        registerReceiver(br, IntentFilter(BROADCAST_ACTION))
-    }
-
-    override fun onStop() {
-        super.onStop()
-        try {
-            unregisterReceiver(br)
-        } catch (e: IllegalArgumentException) {
-            Log.e("Broadcast", "Time tick Receiver not registered", e)
-        }
-    }
-
 
 }
