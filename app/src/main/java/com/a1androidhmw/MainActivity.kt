@@ -19,7 +19,7 @@ import kotlinx.android.synthetic.main.fragment_.*
 
 class MainActivity : AppCompatActivity() {
 
-    var br: BroadcastReceiver = object : BroadcastReceiver() {
+    private var br: BroadcastReceiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context?, intent: Intent?) {
             val result = intent?.getDoubleExtra(RESULT, 0.0)
             fragment.resultText.text = "Result = $result"
