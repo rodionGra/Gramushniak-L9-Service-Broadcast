@@ -10,7 +10,6 @@ import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.android.synthetic.main.fragment_.*
 
 /**Write a project that will use the broadcast receiver to capture the result of the Service.
  * Service must be started with Activity. Service performs any arithmetic operation.
@@ -21,8 +20,11 @@ class MainActivity : AppCompatActivity() {
 
     private var br: BroadcastReceiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context?, intent: Intent?) {
-            val result = intent?.getDoubleExtra(RESULT, 0.0)
-            fragment.resultText.text = "Result = $result"
+            val result = intent?.getDoubleExtra(RESULT, 0.0) ?: 0.0
+            supportFragmentManager
+                .beginTransaction()
+                .replace(R.id.fragment, FragmentForAnswer.newInstance(result))
+                .commit()
         }
     }
 
@@ -47,15 +49,14 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun setupListeners(){
+    private fun setupListeners() {
         start_service_textV.setOnClickListener {
-            val number1Str : String = first_number_edit.text.toString()
-            val number2Str : String = second_number_edit.text.toString()
+            val number1Str: String = first_number_edit.text.toString()
+            val number2Str: String = second_number_edit.text.toString()
 
-            if(number1Str.trim() == "" || number2Str.trim() == ""){
-                Toast.makeText(this, "Sorry you did't type number" , Toast.LENGTH_SHORT).show()
-            }
-            else {
+            if (number1Str.trim() == "" || number2Str.trim() == "") {
+                Toast.makeText(this, "Sorry you did't type number", Toast.LENGTH_SHORT).show()
+            } else {
                 val number1 = Double.valueOf(number1Str)
                 val number2 = Double.valueOf(number2Str)
                 Intent(this, CalculateService::class.java).apply {

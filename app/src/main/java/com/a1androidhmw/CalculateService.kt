@@ -23,7 +23,7 @@ class CalculateService : Service() {
         return null
     }
 
-    private fun addNumber(intent: Intent) : Double{
+    private fun addNumber(intent: Intent): Double {
         val firstNum = intent.getDoubleExtra(FIRST_NUMBER, -2.0)
         val secondNum = intent.getDoubleExtra(SECOND_NUMBER, -1.0)
         return firstNum + secondNum
